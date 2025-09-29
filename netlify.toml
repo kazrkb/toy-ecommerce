@@ -1,0 +1,32 @@
+# Netlify Configuration for Node.js App
+[build]
+  command = "npm run build"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+  NODE_ENV = "production"
+  SESSION_SECRET = "toy-ecommerce-netlify-secret-key"
+
+# Note: For full Express.js apps, consider using Railway or Render instead
+# Netlify works best with static sites or serverless functions
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/products/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/cart/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/auth/*"
+  to = "/index.html"
+  status = 200
