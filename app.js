@@ -28,9 +28,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Routes
 app.use('/', require('./routes/index'));
-app.use('/products', require('./routes/products'));
-app.use('/auth', require('./routes/auth'));
-app.use('/cart', require('./routes/cart'));
+app.use('/products', require('./routes/products-static')); // Using static version for easy deployment
+app.use('/auth', require('./routes/auth-static')); // Using static version for easy deployment
+app.use('/cart', require('./routes/cart-static')); // Using static version for easy deployment
 app.use('/admin', require('./routes/admin'));
 
 // Error handling middleware
