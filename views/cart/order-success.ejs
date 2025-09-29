@@ -1,0 +1,43 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto text-center">
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <div class="mb-6">
+                <div class="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-green-100">
+                    <i class="fas fa-check-circle text-green-600 text-4xl"></i>
+                </div>
+            </div>
+            
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">Order Placed Successfully!</h1>
+            
+            <p class="text-gray-600 mb-6">
+                Thank you for your order, <strong><%= customerName %></strong>! 
+                Your order has been received and is being processed.
+            </p>
+            
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <div class="text-left">
+                    <p class="text-sm text-gray-600 mb-1">Order ID:</p>
+                    <p class="font-bold text-lg">#<%= orderId %></p>
+                    
+                    <p class="text-sm text-gray-600 mb-1 mt-4">Total Amount:</p>
+                    <p class="font-bold text-2xl text-green-600">$<%= total %></p>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-8">
+                You will receive an email confirmation shortly. 
+                We'll notify you when your order ships.
+            </p>
+            
+            <div class="space-y-4">
+                <a href="/products" class="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
+                </a>
+                
+                <a href="/" class="block bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    <i class="fas fa-home mr-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-white hover:text-blue-200">
+                        <i class="fas fa-car mr-2"></i>RC Toy Store
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/products" class="hover:text-blue-200 transition">Products</a>
+                    <div class="relative group">
+                        <button class="hover:text-blue-200 transition flex items-center">
+                            Categories <i class="fas fa-chevron-down ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                            <a href="/products?category=Sports Cars" class="block px-4 py-2 hover:bg-gray-100">Sports Cars</a>
+                            <a href="/products?category=Helicopters" class="block px-4 py-2 hover:bg-gray-100">Helicopters</a>
+                            <a href="/products?category=Fighter Jets" class="block px-4 py-2 hover:bg-gray-100">Fighter Jets</a>
+                            <a href="/products?category=Speed Boats" class="block px-4 py-2 hover:bg-gray-100">Speed Boats</a>
+                        </div>
+                    </div>
+                    <a href="/about" class="hover:text-blue-200 transition">About</a>
+                    <a href="/contact" class="hover:text-blue-200 transition">Contact</a>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <form action="/products" method="GET" class="hidden lg:flex">
+                        <div class="relative">
+                            <input type="text" name="search" placeholder="Search products..." 
+                                   class="bg-blue-800 text-white placeholder-blue-300 rounded-md px-4 py-2 pr-10 focus:outline-none focus:bg-blue-700">
+                            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2">
+                                <i class="fas fa-search text-blue-300"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Cart -->
+                    <a href="/cart" class="relative hover:text-blue-200 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"></span>
+                    </a>
+
+                    <% if (user && user.role === 'admin') { %>
+                        <!-- Admin Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 hover:text-blue-200 transition">
+                                <i class="fas fa-user-shield"></i>
+                                <span><%= user.firstName %></span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="absolute top-full right-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="/admin" class="block px-4 py-2 hover:bg-gray-100 text-blue-600">Admin Panel</a>
+                                <hr class="my-1">
+                                <a href="/auth/admin-logout" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/auth/admin-login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition text-sm">Admin</a>
+                    <% } %>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-2">
+                    <a href="/" class="py-2 hover:text-blue-200">Home</a>
+                    <a href="/products" class="py-2 hover:text-blue-200">Products</a>
+                    <a href="/about" class="py-2 hover:text-blue-200">About</a>
+                    <a href="/contact" class="py-2 hover:text-blue-200">Contact</a>
+                    <hr class="border-blue-700">
+                    <a href="/products?category=Sports Cars" class="py-2 hover:text-blue-200">Sports Cars</a>
+                    <a href="/products?category=Helicopters" class="py-2 hover:text-blue-200">Helicopters</a>
+                    <a href="/products?category=Fighter Jets" class="py-2 hover:text-blue-200">Fighter Jets</a>
+                    <a href="/products?category=Speed Boats" class="py-2 hover:text-blue-200">Speed Boats</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+<section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+    <div class="container mx-auto px-4 py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Experience the Thrill of <span class="text-yellow-400">RC Racing</span>
+            </h1>
+            <p class="text-xl mb-8 text-blue-100">
+                Discover our premium collection of remote-controlled sports cars, helicopters, fighter jets, and speed boats. 
+                Built for performance, designed for excitement.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/products" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-lg text-lg transition">
+                    Shop Now
+                </a>
+                <a href="#featured" class="border-2 border-white hover:bg-white hover:text-blue-900 font-bold py-4 px-8 rounded-lg text-lg transition">
+                    View Featured
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Shop by Category</h2>
+            <p class="text-xl text-gray-600">Choose from our exciting range of RC vehicles</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <% categories.forEach(category => { %>
+                <div class="group cursor-pointer">
+                    <a href="/products?category=<%= encodeURIComponent(category.name) %>" class="block">
+                        <div class="bg-gray-100 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                <i class="fas fa-car text-white text-6xl group-hover:scale-110 transition-transform"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2"><%= category.name %></h3>
+                                <p class="text-gray-600"><%= category.description %></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section id="featured" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Featured Products</h2>
+            <p class="text-xl text-gray-600">Discover our top-rated RC vehicles</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <% featuredProducts.forEach(product => { %>
+                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <% if (product.image_url && product.image_url !== '/images/products/placeholder.jpg') { %>
+                            <img src="<%= product.image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>" style="display: none;">
+                                <% if (product.category_name === 'Sports Cars') { %>
+                                    <i class="fas fa-car"></i>
+                                <% } else if (product.category_name === 'Helicopters') { %>
+                                    <i class="fas fa-helicopter"></i>
+                                <% } else if (product.category_name === 'Fighter Jets') { %>
+                                    <i class="fas fa-fighter-jet"></i>
+                                <% } else if (product.category_name === 'Speed Boats') { %>
+                                    <i class="fas fa-ship"></i>
+                                <% } else { %>
+                                    <i class="fas fa-image"></i>
+                                <% } %>
+                            </div>
+                        <% } else { %>
+                            <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>">
+                                <% if (product.category_name === 'Sports Cars') { %>
+                                    <i class="fas fa-car"></i>
+                                <% } else if (product.category_name === 'Helicopters') { %>
+                                    <i class="fas fa-helicopter"></i>
+                                <% } else if (product.category_name === 'Fighter Jets') { %>
+                                    <i class="fas fa-fighter-jet"></i>
+                                <% } else if (product.category_name === 'Speed Boats') { %>
+                                    <i class="fas fa-ship"></i>
+                                <% } else { %>
+                                    <i class="fas fa-image"></i>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mb-2">
+                            <%= product.category_name %>
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">
+                            <a href="/products/<%= product.id %>" class="hover:text-blue-600">
+                                <%= product.name %>
+                            </a>
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2"><%= product.description %></p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-green-600">$<%= product.price %></span>
+                            <button onclick="addToCart(<%= product.id %>)" 
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+        
+        <div class="text-center mt-12">
+            <a href="/products" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition">
+                View All Products
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-blue-900 text-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Why Choose RC Toy Store?</h2>
+            <p class="text-xl text-blue-100">We're committed to delivering the best RC experience</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="bg-blue-800 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shipping-fast text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Fast Shipping</h3>
+                <p class="text-blue-100">Free shipping on orders over $200. Get your RC toys delivered quickly and safely.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-blue-800 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-tools text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Expert Support</h3>
+                <p class="text-blue-100">Our RC experts are here to help with setup, repairs, and technical questions.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-blue-800 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-alt text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Quality Guarantee</h3>
+                <p class="text-blue-100">All products come with warranty and 30-day money-back guarantee.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="py-16 bg-yellow-400">
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Stay Updated</h2>
+            <p class="text-lg text-gray-700 mb-8">Get the latest news on new products, exclusive deals, and RC tips!</p>
+            
+            <form class="flex flex-col sm:flex-row gap-4">
+                <input type="email" placeholder="Enter your email" 
+                       class="flex-1 px-4 py-3 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg transition">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+async function addToCart(productId) {
+    try {
+        const response = await fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId, quantity: 1 })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            alert('Product added to cart!');
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('Failed to add product to cart');
+    }
+}
+</script>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">RC Toy Store</h3>
+                    <p class="text-gray-300">Your premium destination for high-quality remote-controlled toys. Experience the thrill of RC racing and flying!</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/products?category=Sports Cars" class="hover:text-white">Sports Cars</a></li>
+                        <li><a href="/products?category=Helicopters" class="hover:text-white">Helicopters</a></li>
+                        <li><a href="/products?category=Fighter Jets" class="hover:text-white">Fighter Jets</a></li>
+                        <li><a href="/products?category=Speed Boats" class="hover:text-white">Speed Boats</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Customer Service</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/contact" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="/shipping" class="hover:text-white">Shipping Info</a></li>
+                        <li><a href="/returns" class="hover:text-white">Returns</a></li>
+                        <li><a href="/warranty" class="hover:text-white">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 text-2xl">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-gray-700 my-8">
+            <div class="text-center text-gray-300">
+                <p>&copy; 2024 RC Toy Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

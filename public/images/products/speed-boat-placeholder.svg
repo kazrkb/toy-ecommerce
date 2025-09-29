@@ -1,0 +1,12 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="boatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00d2d3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#54a0ff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#boatGrad)"/>
+            <text x="200" y="120" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle">🚤</text>
+            <text x="200" y="180" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">RC Speed Boat</text>
+            <text x="200" y="220" font-family="Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.8)" text-anchor="middle">Water Racing</text>
+        </svg>

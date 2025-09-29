@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-white hover:text-blue-200">
+                        <i class="fas fa-car mr-2"></i>RC Toy Store
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/products" class="hover:text-blue-200 transition">Products</a>
+                    <div class="relative group">
+                        <button class="hover:text-blue-200 transition flex items-center">
+                            Categories <i class="fas fa-chevron-down ml-1"></i>
+                        </button>
+                        <div class="absolute top-full left-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                            <a href="/products?category=Sports Cars" class="block px-4 py-2 hover:bg-gray-100">Sports Cars</a>
+                            <a href="/products?category=Helicopters" class="block px-4 py-2 hover:bg-gray-100">Helicopters</a>
+                            <a href="/products?category=Fighter Jets" class="block px-4 py-2 hover:bg-gray-100">Fighter Jets</a>
+                            <a href="/products?category=Speed Boats" class="block px-4 py-2 hover:bg-gray-100">Speed Boats</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart -->
+                    <a href="/cart" class="relative hover:text-blue-200 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"></span>
+                    </a>
+
+                    <% if (user && user.role === 'admin') { %>
+                        <!-- Admin Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 hover:text-blue-200 transition">
+                                <i class="fas fa-user-shield"></i>
+                                <span><%= user.firstName %></span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="absolute top-full right-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="/admin" class="block px-4 py-2 hover:bg-gray-100 text-blue-600">Admin Panel</a>
+                                <hr class="my-1">
+                                <a href="/auth/admin-logout" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/auth/admin-login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition text-sm">Admin</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Products</h1>
+            <p class="text-gray-600">Discover our amazing collection of RC toys</p>
+        </div>
+        
+        <!-- Sort Options -->
+        <div class="mt-4 md:mt-0">
+            <select onchange="filterProducts('', this.value)" class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Sort by</option>
+                <option value="name" <%= currentSort === 'name' ? 'selected' : '' %>>Name</option>
+                <option value="price_low" <%= currentSort === 'price_low' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="price_high" <%= currentSort === 'price_high' ? 'selected' : '' %>>Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Filters -->
+        <div class="lg:w-1/4">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Categories</h3>
+                <div class="space-y-2">
+                    <div>
+                        <a href="/products" class="block py-2 px-3 rounded-md hover:bg-gray-100 <%= currentCategory === '' ? 'bg-blue-100 text-blue-600' : 'text-gray-700' %>">
+                            All Products
+                        </a>
+                    </div>
+                    <% categories.forEach(category => { %>
+                        <div>
+                            <a href="/products?category=<%= encodeURIComponent(category.name) %>" 
+                               class="block py-2 px-3 rounded-md hover:bg-gray-100 <%= currentCategory === category.name ? 'bg-blue-100 text-blue-600' : 'text-gray-700' %>">
+                                <%= category.name %>
+                            </a>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="lg:w-3/4">
+            <% if (products.length === 0) { %>
+                <div class="text-center py-12">
+                    <i class="fas fa-search text-gray-400 text-6xl mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-600 mb-2">No products found</h3>
+                    <p class="text-gray-500">Try adjusting your search or filter criteria</p>
+                </div>
+            <% } else { %>
+                <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <% products.forEach(product => { %>
+                                <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden product-card">
+                                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                                        <% if (product.image_url && product.image_url !== '/images/products/placeholder.jpg') { %>
+                                            <img src="<%= product.image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover" 
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>" style="display: none;">
+                                                <% if (product.category_name === 'Sports Cars') { %>
+                                                    <i class="fas fa-car"></i>
+                                                <% } else if (product.category_name === 'Helicopters') { %>
+                                                    <i class="fas fa-helicopter"></i>
+                                                <% } else if (product.category_name === 'Fighter Jets') { %>
+                                                    <i class="fas fa-fighter-jet"></i>
+                                                <% } else if (product.category_name === 'Speed Boats') { %>
+                                                    <i class="fas fa-ship"></i>
+                                                <% } else { %>
+                                                    <i class="fas fa-image"></i>
+                                                <% } %>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>">
+                                                <% if (product.category_name === 'Sports Cars') { %>
+                                                    <i class="fas fa-car"></i>
+                                                <% } else if (product.category_name === 'Helicopters') { %>
+                                                    <i class="fas fa-helicopter"></i>
+                                                <% } else if (product.category_name === 'Fighter Jets') { %>
+                                                    <i class="fas fa-fighter-jet"></i>
+                                                <% } else if (product.category_name === 'Speed Boats') { %>
+                                                    <i class="fas fa-ship"></i>
+                                                <% } else { %>
+                                                    <i class="fas fa-image"></i>
+                                                <% } %>
+                                            </div>
+                                        <% } %>
+                                    </div>                            <div class="p-6">
+                                <% if (product.category_name) { %>
+                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mb-2">
+                                        <%= product.category_name %>
+                                    </span>
+                                <% } %>
+                                
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">
+                                    <a href="/products/<%= product.id %>" class="hover:text-blue-600">
+                                        <%= product.name %>
+                                    </a>
+                                </h3>
+                                
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-2"><%= product.description %></p>
+                                
+                                <% if (product.brand) { %>
+                                    <p class="text-xs text-gray-500 mb-2">Brand: <%= product.brand %></p>
+                                <% } %>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-2xl font-bold text-green-600">$<%= product.price %></span>
+                                    
+                                    <% if (product.stock_quantity > 0) { %>
+                                        <button onclick="addToCart(<%= product.id %>)" 
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
+                                            Add to Cart
+                                        </button>
+                                    <% } else { %>
+                                        <span class="bg-gray-400 text-white px-4 py-2 rounded-md">Out of Stock</span>
+                                    <% } %>
+                                </div>
+                                
+                                <% if (product.stock_quantity > 0 && product.stock_quantity <= 5) { %>
+                                    <p class="text-orange-600 text-xs mt-2">Only <%= product.stock_quantity %> left in stock!</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+// Handle add to cart
+async function addToCart(productId) {
+    try {
+        const response = await fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId, quantity: 1 })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            showNotification('Product added to cart!', 'success');
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        showNotification('Failed to add product to cart', 'error');
+    }
+}
+</script>

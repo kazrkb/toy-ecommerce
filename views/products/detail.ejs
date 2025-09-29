@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-white hover:text-blue-200">
+                        <i class="fas fa-car mr-2"></i>RC Toy Store
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/products" class="hover:text-blue-200 transition">Products</a>
+                    <a href="/about" class="hover:text-blue-200 transition">About</a>
+                    <a href="/contact" class="hover:text-blue-200 transition">Contact</a>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart -->
+                    <a href="/cart" class="relative hover:text-blue-200 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"></span>
+                    </a>
+
+                    <% if (user && user.role === 'admin') { %>
+                        <!-- Admin Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 hover:text-blue-200 transition">
+                                <i class="fas fa-user-shield"></i>
+                                <span><%= user.firstName %></span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="absolute top-full right-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="/admin" class="block px-4 py-2 hover:bg-gray-100 text-blue-600">Admin Panel</a>
+                                <hr class="my-1">
+                                <a href="/auth/admin-logout" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/auth/admin-login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition text-sm">Admin</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <!-- Breadcrumb -->
+        <div class="bg-white border-b">
+            <div class="container mx-auto px-4 py-4">
+                <nav class="text-sm">
+                    <a href="/" class="text-blue-600 hover:text-blue-800">Home</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <a href="/products" class="text-blue-600 hover:text-blue-800">Products</a>
+                    <span class="mx-2 text-gray-500">/</span>
+                    <span class="text-gray-500"><%= product.name %></span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Product Detail -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Product Image -->
+                    <div>
+                        <div class="bg-gray-100 rounded-lg p-8 mb-4">
+                            <% if (product.image_url && product.image_url !== '/images/products/placeholder.jpg') { %>
+                                <img src="<%= product.image_url %>" alt="<%= product.name %>" class="w-full h-96 object-contain" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>" style="display: none; height: 384px;">
+                                    <% if (product.category_name === 'Sports Cars') { %>
+                                        <i class="fas fa-car text-8xl"></i>
+                                    <% } else if (product.category_name === 'Helicopters') { %>
+                                        <i class="fas fa-helicopter text-8xl"></i>
+                                    <% } else if (product.category_name === 'Fighter Jets') { %>
+                                        <i class="fas fa-fighter-jet text-8xl"></i>
+                                    <% } else if (product.category_name === 'Speed Boats') { %>
+                                        <i class="fas fa-ship text-8xl"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-image text-8xl"></i>
+                                    <% } %>
+                                </div>
+                            <% } else { %>
+                                <div class="product-image-placeholder product-image-<%= product.category_name.toLowerCase().replace(/ /g, '-') %>" style="height: 384px;">
+                                    <% if (product.category_name === 'Sports Cars') { %>
+                                        <i class="fas fa-car text-8xl"></i>
+                                    <% } else if (product.category_name === 'Helicopters') { %>
+                                        <i class="fas fa-helicopter text-8xl"></i>
+                                    <% } else if (product.category_name === 'Fighter Jets') { %>
+                                        <i class="fas fa-fighter-jet text-8xl"></i>
+                                    <% } else if (product.category_name === 'Speed Boats') { %>
+                                        <i class="fas fa-ship text-8xl"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-image text-8xl"></i>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Product Information -->
+                    <div>
+                        <div class="mb-4">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mb-2">
+                                <%= product.category_name %>
+                            </span>
+                        </div>
+
+                        <h1 class="text-4xl font-bold text-gray-800 mb-4"><%= product.name %></h1>
+                        
+                        <div class="flex items-center mb-6">
+                            <span class="text-4xl font-bold text-green-600 mr-4">$<%= product.price %></span>
+                            <% if (product.stock_quantity > 0) { %>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                    <i class="fas fa-check mr-1"></i>In Stock (<%= product.stock_quantity %> available)
+                                </span>
+                            <% } else { %>
+                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
+                                    <i class="fas fa-times mr-1"></i>Out of Stock
+                                </span>
+                            <% } %>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Description</h3>
+                            <p class="text-gray-600 leading-relaxed"><%= product.description %></p>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Details</h3>
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                    <% if (product.brand) { %>
+                                        <div class="flex justify-between border-b border-gray-200 pb-2">
+                                            <span class="font-medium text-gray-600">Brand:</span>
+                                            <span class="text-gray-800"><%= product.brand %></span>
+                                        </div>
+                                    <% } %>
+                                    <% if (product.model) { %>
+                                        <div class="flex justify-between border-b border-gray-200 pb-2">
+                                            <span class="font-medium text-gray-600">Model:</span>
+                                            <span class="text-gray-800"><%= product.model %></span>
+                                        </div>
+                                    <% } %>
+                                    <div class="flex justify-between border-b border-gray-200 pb-2">
+                                        <span class="font-medium text-gray-600">Category:</span>
+                                        <span class="text-gray-800"><%= product.category_name %></span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-gray-200 pb-2">
+                                        <span class="font-medium text-gray-600">Stock:</span>
+                                        <span class="text-gray-800"><%= product.stock_quantity %> units</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Specifications -->
+                        <% if (product.specifications) { %>
+                            <div class="mb-8">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Specifications</h3>
+                                <div class="bg-gray-50 rounded-lg p-6">
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <% try { 
+                                            const specs = JSON.parse(product.specifications);
+                                            Object.entries(specs).forEach(([key, value]) => { %>
+                                                <div class="flex justify-between border-b border-gray-200 pb-2">
+                                                    <span class="font-medium text-gray-600 capitalize"><%= key.replace('_', ' ') %>:</span>
+                                                    <span class="text-gray-800"><%= value %></span>
+                                                </div>
+                                            <% });
+                                        } catch (e) { %>
+                                            <p class="text-gray-600">Specifications not available</p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <!-- Add to Cart -->
+                        <div class="mb-8">
+                            <% if (product.stock_quantity > 0) { %>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <div class="quantity-control flex items-center border rounded">
+                                        <button type="button" class="quantity-minus px-3 py-2 hover:bg-gray-100">-</button>
+                                        <input type="number" id="quantity" value="1" min="1" max="<%= product.stock_quantity %>"
+                                               class="w-16 text-center border-0 focus:outline-none">
+                                        <button type="button" class="quantity-plus px-3 py-2 hover:bg-gray-100">+</button>
+                                    </div>
+                                    <button onclick="addToCartWithQuantity(<%= product.id %>)" 
+                                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                                        <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                                <button onclick="buyNow(<%= product.id %>)" 
+                                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                                    <i class="fas fa-bolt mr-2"></i>Buy Now
+                                </button>
+                            <% } else { %>
+                                <button disabled class="w-full bg-gray-400 text-white font-bold py-3 px-6 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-times mr-2"></i>Out of Stock
+                                </button>
+                            <% } %>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <div class="grid md:grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <i class="fas fa-shipping-fast text-blue-600 text-2xl mb-2"></i>
+                                    <h4 class="font-semibold text-gray-800">Free Shipping</h4>
+                                    <p class="text-gray-600 text-sm">On orders over $200</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-undo text-blue-600 text-2xl mb-2"></i>
+                                    <h4 class="font-semibold text-gray-800">30-Day Returns</h4>
+                                    <p class="text-gray-600 text-sm">Easy return policy</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-tools text-blue-600 text-2xl mb-2"></i>
+                                    <h4 class="font-semibold text-gray-800">Expert Support</h4>
+                                    <p class="text-gray-600 text-sm">RC technical help</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Products -->
+        <% if (relatedProducts && relatedProducts.length > 0) { %>
+            <section class="py-16 bg-gray-50">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Related Products</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <% relatedProducts.forEach(relatedProduct => { %>
+                            <div class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                                <div class="h-48 bg-gray-200 flex items-center justify-center">
+                                    <% if (relatedProduct.image_url) { %>
+                                        <img src="<%= relatedProduct.image_url %>" alt="<%= relatedProduct.name %>" class="w-full h-full object-cover">
+                                    <% } else { %>
+                                        <i class="fas fa-image text-gray-400 text-4xl"></i>
+                                    <% } %>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-2">
+                                        <a href="/products/<%= relatedProduct.id %>" class="hover:text-blue-600">
+                                            <%= relatedProduct.name %>
+                                        </a>
+                                    </h3>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xl font-bold text-green-600">$<%= relatedProduct.price %></span>
+                                        <a href="/products/<%= relatedProduct.id %>" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition text-sm">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </section>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">RC Toy Store</h3>
+                    <p class="text-gray-300">Your premium destination for high-quality remote-controlled toys.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/products?category=Sports Cars" class="hover:text-white">Sports Cars</a></li>
+                        <li><a href="/products?category=Helicopters" class="hover:text-white">Helicopters</a></li>
+                        <li><a href="/products?category=Fighter Jets" class="hover:text-white">Fighter Jets</a></li>
+                        <li><a href="/products?category=Speed Boats" class="hover:text-white">Speed Boats</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Customer Service</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/contact" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="/shipping" class="hover:text-white">Shipping Info</a></li>
+                        <li><a href="/returns" class="hover:text-white">Returns</a></li>
+                        <li><a href="/warranty" class="hover:text-white">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 text-2xl">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-gray-700 my-8">
+            <div class="text-center text-gray-300">
+                <p>&copy; 2024 RC Toy Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Handle quantity controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity');
+            const minusBtn = document.querySelector('.quantity-minus');
+            const plusBtn = document.querySelector('.quantity-plus');
+
+            if (minusBtn && plusBtn && quantityInput) {
+                minusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    const maxValue = parseInt(quantityInput.getAttribute('max'));
+                    if (currentValue < maxValue) {
+                        quantityInput.value = currentValue + 1;
+                    }
+                });
+            }
+        });
+
+        // Add to cart with quantity
+        async function addToCartWithQuantity(productId) {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            try {
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId, quantity })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert(`${quantity} item(s) added to cart!`);
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Failed to add product to cart');
+            }
+        }
+
+        // Buy now function
+        async function buyNow(productId) {
+            await addToCartWithQuantity(productId);
+            window.location.href = '/cart/checkout';
+        }
+    </script>
+</body>
+</html>

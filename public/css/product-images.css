@@ -1,0 +1,60 @@
+/* Product Image Placeholders */
+.product-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 3rem;
+    border-radius: 8px;
+}
+
+.product-image-sports-car {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
+.product-image-helicopter {
+    background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+}
+
+.product-image-fighter-jet {
+    background: linear-gradient(135deg, #2c2c54 0%, #40407a 100%);
+}
+
+.product-image-speed-boat {
+    background: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%);
+}
+
+/* Hero background pattern */
+.hero-pattern {
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.3) 0%, transparent 50%);
+}
+
+/* Card hover effects */
+.product-card-hover {
+    transition: all 0.3s ease;
+}
+
+.product-card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading animation for images */
+.image-loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}

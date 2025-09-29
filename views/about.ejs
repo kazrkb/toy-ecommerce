@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-white hover:text-blue-200">
+                        <i class="fas fa-car mr-2"></i>RC Toy Store
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/products" class="hover:text-blue-200 transition">Products</a>
+                    <a href="/about" class="hover:text-blue-200 transition">About</a>
+                    <a href="/contact" class="hover:text-blue-200 transition">Contact</a>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart -->
+                    <a href="/cart" class="relative hover:text-blue-200 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"></span>
+                    </a>
+
+                    <% if (user && user.role === 'admin') { %>
+                        <!-- Admin Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center space-x-2 hover:text-blue-200 transition">
+                                <i class="fas fa-user-shield"></i>
+                                <span><%= user.firstName %></span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="absolute top-full right-0 bg-white text-gray-800 shadow-lg rounded-md py-2 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                                <a href="/admin" class="block px-4 py-2 hover:bg-gray-100 text-blue-600">Admin Panel</a>
+                                <hr class="my-1">
+                                <a href="/auth/admin-logout" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/auth/admin-login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition text-sm">Admin</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <!-- About Hero Section -->
+        <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-5xl font-bold mb-6">About RC Toy Store</h1>
+                <p class="text-xl text-blue-100 max-w-3xl mx-auto">
+                    Your premier destination for high-quality remote-controlled vehicles that bring excitement and adventure to life.
+                </p>
+            </div>
+        </section>
+
+        <!-- About Content -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Our Story</h2>
+                        <p class="text-gray-600 mb-4">
+                            Founded in 2020, RC Toy Store began as a passion project by remote control enthusiasts who wanted to share the thrill of RC racing and flying with the world. What started in a small garage has grown into a leading retailer of premium remote-controlled vehicles.
+                        </p>
+                        <p class="text-gray-600 mb-4">
+                            We specialize in four main categories: high-speed sports cars for racing enthusiasts, agile helicopters for aerial adventures, powerful fighter jets for aviation lovers, and fast speed boats for water racing excitement.
+                        </p>
+                        <p class="text-gray-600">
+                            Every product in our store is carefully selected and tested by our team of RC experts to ensure you get the best performance, durability, and value for your investment.
+                        </p>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Why Choose Us?</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-check-circle text-green-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Expert Selection</h4>
+                                    <p class="text-gray-600">Every product is tested and approved by RC professionals</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-shipping-fast text-green-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Fast Shipping</h4>
+                                    <p class="text-gray-600">Free shipping on orders over $200</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-tools text-green-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Expert Support</h4>
+                                    <p class="text-gray-600">Get help with setup, repairs, and technical questions</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-shield-alt text-green-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Quality Guarantee</h4>
+                                    <p class="text-gray-600">30-day money-back guarantee on all products</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Our Mission</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg p-8 shadow-md">
+                        <i class="fas fa-heart text-blue-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Passion</h3>
+                        <p class="text-gray-600">We're passionate about remote control vehicles and sharing that excitement with our customers.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-8 shadow-md">
+                        <i class="fas fa-star text-blue-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Quality</h3>
+                        <p class="text-gray-600">We offer only the highest quality RC vehicles from trusted manufacturers.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-8 shadow-md">
+                        <i class="fas fa-users text-blue-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Community</h3>
+                        <p class="text-gray-600">Building a community of RC enthusiasts who share tips, tricks, and adventures.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">RC Toy Store</h3>
+                    <p class="text-gray-300">Your premium destination for high-quality remote-controlled toys.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/products?category=Sports Cars" class="hover:text-white">Sports Cars</a></li>
+                        <li><a href="/products?category=Helicopters" class="hover:text-white">Helicopters</a></li>
+                        <li><a href="/products?category=Fighter Jets" class="hover:text-white">Fighter Jets</a></li>
+                        <li><a href="/products?category=Speed Boats" class="hover:text-white">Speed Boats</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Customer Service</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="/contact" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="/shipping" class="hover:text-white">Shipping Info</a></li>
+                        <li><a href="/returns" class="hover:text-white">Returns</a></li>
+                        <li><a href="/warranty" class="hover:text-white">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 text-2xl">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-gray-700 my-8">
+            <div class="text-center text-gray-300">
+                <p>&copy; 2024 RC Toy Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
